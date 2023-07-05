@@ -28,6 +28,12 @@
           <string>com.zaferayan.samplegoogleauth</string>
         </array>
       </dict>
+      <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>com.googleusercontent.apps.575805126642-6pgihmsjr6pos74mic02gnjblkftte15</string>
+        </array>
+      </dict>
     </array>
     <key>CFBundleVersion</key>
     <string>1</string>
