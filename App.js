@@ -1,30 +1,46 @@
-import { useState, useEffect } from "react";
-import { Text, SafeAreaView, Button } from "react-native";
+import React from "react";
+import {
+  AppleButton,
+  appleAuth,
+} from "@invertase/react-native-apple-authentication";
+import { SafeAreaView } from "react-native";
 import auth from "@react-native-firebase/auth";
-import { GoogleSignin } from "@react-native-google-signin/google-signin";
-
-GoogleSignin.configure({
-  webClientId: "575805126642-163oitqg69b0ciphdgi1ea1qptrbg021",
-});
 
 export default function App() {
-  const onGoogleButtonPress = async () => {
-    // Check if your device supports Google Play
-    await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-    // Get the users ID token
-    const { idToken } = await GoogleSignin.signIn();
+  const handleAppleLogin = async () => {
+    // Start the sign-in request
+    const appleAuthRequestResponse = await appleAuth.performRequest({
+      requestedOperation: appleAuth.Operation.LOGIN,
+      requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+    });
 
-    // Create a Google credential with the token
-    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+    // Ensure Apple returned a user identityToken
+    if (!appleAuthRequestResponse.identityToken) {
+      throw new Error("Apple Sign-In failed - no identify token returned");
+    }
 
-    // Sign-in the user with the credential
-    const response = await auth().signInWithCredential(googleCredential);
+    // Create a Firebase credential from the response
+    const { identityToken, nonce } = appleAuthRequestResponse;
+    const appleCredential = auth.AppleAuthProvider.credential(
+      identityToken,
+      nonce
+    );
+
+    // Sign the user in with the credential
+    const response = auth().signInWithCredential(appleCredential);
     console.log(response);
   };
-
   return (
     <SafeAreaView>
-      <Button title="Google Sign-In" onPress={onGoogleButtonPress} />
+      <AppleButton
+        buttonStyle={AppleButton.Style.WHITE}
+        buttonType={AppleButton.Type.SIGN_IN}
+        style={{
+          width: 160,
+          height: 45,
+        }}
+        onPress={handleAppleLogin}
+      />
     </SafeAreaView>
   );
 }

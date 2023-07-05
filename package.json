@@ -8,6 +8,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@invertase/react-native-apple-authentication": "^2.2.2",
     "@react-native-firebase/app": "^18.1.0",
     "@react-native-firebase/auth": "^18.1.0",
     "@react-native-google-signin/google-signin": "^10.0.1",
