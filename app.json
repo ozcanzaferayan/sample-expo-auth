@@ -1,5 +1,6 @@
 {
   "expo": {
+    "scheme": "samplegoogleauth",
     "name": "sample-google-auth",
     "slug": "sample-google-auth",
     "version": "1.0.0",
